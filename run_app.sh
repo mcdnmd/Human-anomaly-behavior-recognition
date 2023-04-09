@@ -1,3 +1,3 @@
 
-
-python app.py
+pwd
+python skeleton_recognizer
