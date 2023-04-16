@@ -6,3 +6,4 @@ data/yolov7-w6-pose.pt
 flagged
 __pycache__
 .DS_Store
+*.mp4
