@@ -20,8 +20,14 @@ def detect_image(inpt_img):
 
 def detect_video(inpt_video):
     capture = cv2.VideoCapture(inpt_video)
+
+    video_frames = capture.get(cv2.CAP_PROP_FRAME_COUNT)
+    video_fps = capture.get(cv2.CAP_PROP_FPS)
+
+    landmark_poses = []
+
     idx = 1
-    fps = 10
+    fps = 1
 
     fourcc = cv2.VideoWriter_fourcc(*'avc1')
     output_video_path = config.ROOT / f"data/out_{os.path.basename(inpt_video)}"
@@ -31,17 +37,20 @@ def detect_video(inpt_video):
         ret, frame = capture.read()
 
         if ret:
-            if idx % fps == 1:
-                image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                output, image = detector.predict(image)
-                frame = cv2.resize(image, (int(capture.get(3)), int(capture.get(4))))
-                out_video.write(frame)
+            # if idx % fps == 1:
+            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            output, image = detector.predict(image)
+            # Todo: add anomaly detector
+            frame = cv2.resize(image, (int(capture.get(3)), int(capture.get(4))))
+            out_video.write(frame)
+            landmark_poses.append(output)
         else:
             break
         idx += 1
     capture.release()
     out_video.release()
     logger.info("Complite %s" % str(output_video_path))
+    print(landmark_poses)
     return str(output_video_path)
 
 

@@ -13,7 +13,7 @@ wget -P data https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7-
 
 ## Dataset
 
-* https://paperswithcode.com/dataset/ntu-rgb-d-120
+* [UCF-Crime](https://paperswithcode.com/dataset/ucf-crime)
 
 ## References
 

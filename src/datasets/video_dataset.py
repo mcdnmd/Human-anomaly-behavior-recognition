@@ -5,6 +5,7 @@ from PIL import Image
 
 
 class VideoDatasetUCFCrime(Dataset):
+    """Dataset for raw videos"""
     def __init__(self, video_paths, labels, transform=None):
         self.video_paths = video_paths
         self.labels = labels
@@ -31,7 +32,7 @@ class VideoDatasetUCFCrime(Dataset):
         while capture.isOpened():
             ret, frame = capture.read()
             if ret:
-                frames.append(Image.fromarray(frame))
+                frames.append(frame)
             else:
                 break
             idx += 1

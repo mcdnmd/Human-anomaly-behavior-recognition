@@ -1,11 +1,15 @@
 import os
+import cv2
 import pandas as pd
 from pathlib import Path
 
+from src import config
 from src.datasets.video_dataset import VideoDatasetUCFCrime
+from src.skeleton_detector import SkeletonDetector
 
-if __name__ == '__main__':
-    path = Path("/Users/kir/Downloads/Anomaly-Videos-Part-1")
+
+def create_ufc_crime_dataset(dataset_folder: str) -> VideoDatasetUCFCrime:
+    path = Path(dataset_folder)
 
     video_paths = []
     for folder in os.listdir(path):
@@ -17,9 +21,18 @@ if __name__ == '__main__':
     df["video_paths"] = video_paths
     df["label"] = df["video_paths"].apply(lambda x: os.path.basename(x).split("_")[0][:-3].lower())
 
-    dataset = VideoDatasetUCFCrime(
+    return VideoDatasetUCFCrime(
         video_paths=df["video_paths"].tolist(),
         labels=df['label'].tolist()
     )
-    print(dataset)
-    print(dataset[2])
+
+
+if __name__ == '__main__':
+    dataset = create_ufc_crime_dataset("/Users/kir/Downloads/Anomaly-Videos-Part-1")
+    skeleton_detector = SkeletonDetector(config.ROOT / 'data/yolov7-w6-pose.pt')
+
+    frames, label = dataset[50]
+    for frame in frames:
+        pose, img = skeleton_detector.predict(frame)
+        if pose:
+            print(frame, pose)
